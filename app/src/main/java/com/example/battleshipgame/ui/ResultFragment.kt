@@ -35,10 +35,13 @@ class ResultFragment : Fragment() {
         backToMenu = view.findViewById(R.id.btn_back_menu)
         resText = view.findViewById(R.id.tv_result)
 
-        if (viewModel.playerNum == viewModel.winnerNum) {
-            resText.setText(R.string.you_won)
-        } else {
-            resText.setText(R.string.defeat)
+        when (viewModel.playerNum) {
+            viewModel.winnerNum -> {
+                resText.setText(R.string.you_won)
+            }
+            else -> {
+                resText.setText(R.string.defeat)
+            }
         }
 
         backToMenu.setOnClickListener {

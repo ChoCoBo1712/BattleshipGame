@@ -95,10 +95,13 @@ class AuthFragment : Fragment() {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    goToOptionsFragment()
-                } else {
-                    Toast.makeText(requireContext(), "Sign in failed", Toast.LENGTH_SHORT).show()
+                when {
+                    task.isSuccessful -> {
+                        goToOptionsFragment()
+                    }
+                    else -> {
+                        Toast.makeText(requireContext(), "Sign in failed", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
     }

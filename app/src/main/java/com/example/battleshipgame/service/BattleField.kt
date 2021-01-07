@@ -23,14 +23,10 @@ class BattleField: View {
 
     private val gSize = 10
     private var withShips: Boolean = false
-
     var shipRects = mutableListOf<RectF>()
-
     var cells = Array(10) { Array(10) { Cell() } }
-
     var cellWidth: Float = 0.0f
     var cellHeight: Float = 0.0f
-
     private val gridPaint = Paint()
     private val shipPaint = Paint()
     private val hitPaint = Paint()
@@ -91,12 +87,15 @@ class BattleField: View {
         val right: Float
         val bottom: Float
 
-        if (orientation == Orientation.HORIZONTAL) {
-            right = (i + rank - 1 + 0.75f) * cellWidth
-            bottom = (j + 0.75f) * cellHeight
-        } else {
-            right = (i + 0.75f) * cellWidth
-            bottom = (j + rank - 1 + 0.75f) * cellHeight
+        when (orientation) {
+            Orientation.HORIZONTAL -> {
+                right = (i + rank - 1 + 0.75f) * cellWidth
+                bottom = (j + 0.75f) * cellHeight
+            }
+            else -> {
+                right = (i + 0.75f) * cellWidth
+                bottom = (j + rank - 1 + 0.75f) * cellHeight
+            }
         }
         shipRects.add(RectF(left, top, right, bottom))
         refreshCanvas()
@@ -111,11 +110,13 @@ class BattleField: View {
     private fun drawCells(canvas: Canvas) {
         for(i in 0 until 10) {
             for (j in 0 until 10) {
-                if(cells[i][j].state == CellState.MISS) {
-                    drawMiss(canvas, i, j)
-                }
-                else if(cells[i][j].state == CellState.HIT) {
-                    drawHit(canvas, i, j)
+                when (cells[i][j].state) {
+                    CellState.MISS -> {
+                        drawMiss(canvas, i, j)
+                    }
+                    CellState.HIT -> {
+                        drawHit(canvas, i, j)
+                    }
                 }
             }
         }
@@ -124,12 +125,14 @@ class BattleField: View {
     private fun drawMiss(canvas: Canvas, i: Int, j: Int) {
         cellWidth = width.toFloat() / gSize
         cellHeight = height.toFloat() / gSize
+
         canvas.drawCircle((i + 0.5f) * cellWidth, (j + 0.5f) * cellHeight, 0.3f * cellWidth, hitPaint)
     }
 
     private fun drawHit(canvas: Canvas, i: Int, j: Int) {
         cellWidth = width.toFloat() / gSize
         cellHeight = height.toFloat() / gSize
+
         canvas.drawLine((i + 0.2f) * cellWidth, (j + 0.2f) * cellHeight,
             (i + 0.8f) * cellWidth, (j + 0.8f) * cellHeight, missPaint)
 

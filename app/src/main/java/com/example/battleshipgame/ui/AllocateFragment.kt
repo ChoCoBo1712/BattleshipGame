@@ -66,43 +66,57 @@ class AllocateFragment : Fragment() {
         allocField.setOnTouchListener { v, event ->
             when (event?.action) {
                 MotionEvent.ACTION_UP -> {
-                    if (shipAmount == 0 && shipRank == 1) {
-                        Toast.makeText(activity,"No more ships", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val xTouch = event.x
-                        val yTouch = event.y
-                        val i = (xTouch / allocField.cellWidth).toInt()
-                        val j = (yTouch / allocField.cellHeight).toInt()
-                        if (checkShipLocation(i, j, orientation, shipRank)) {
-                            allocField.addShip(i, j, orientation, shipRank)
-                            shipAmount -= 1
-                            if (shipAmount == 0 && shipRank == 1) {
-                                Toast.makeText(activity,"No more ships", Toast.LENGTH_SHORT).show()
+                    when {
+                        shipAmount == 0 && shipRank == 1 -> {
+                            Toast.makeText(activity,"No more ships", Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {
+                            val xTouch = event.x
+                            val yTouch = event.y
+                            val i = (xTouch / allocField.cellWidth).toInt()
+                            val j = (yTouch / allocField.cellHeight).toInt()
+                            when {
+                                checkShipLocation(i, j, orientation, shipRank) -> {
+                                    allocField.addShip(i, j, orientation, shipRank)
+                                    shipAmount -= 1
+                                    when {
+                                        shipAmount == 0 && shipRank == 1 -> {
+                                            Toast.makeText(activity,"No more ships", Toast.LENGTH_SHORT).show()
 
-                                val myFieldPath = if (viewModel.playerNum == 1) "p1" else "p2"
-                                val cellsCoord = mutableListOf<Pair<Int, Int>>()
-                                for (x in 0..9) {
-                                    for (y in 0..9) {
-                                        if(viewModel.myCells[x][y].isShip) {
-                                            cellsCoord.add(Pair(x, y))
+                                            val myFieldPath = when (viewModel.playerNum) {
+                                                1 -> "p1"
+                                                else -> "p2"
+                                            }
+                                            val cellsCoord = mutableListOf<Pair<Int, Int>>()
+                                            for (x in 0..9) {
+                                                for (y in 0..9) {
+                                                    if(viewModel.myCells[x][y].isShip) {
+                                                        cellsCoord.add(Pair(x, y))
+                                                    }
+                                                }
+                                            }
+                                            infoRef.child(myFieldPath).setValue(cellsCoord)
+
+                                            shipRankText.text = getString(R.string.ships_are_set)
+                                            startPlay.visibility = VISIBLE
+                                            viewModel.shipRects = allocField.shipRects
+                                            val path = when (viewModel.playerNum) {
+                                                1 -> "p1Ready"
+                                                else -> "p2Ready"
+                                            }
+                                            gameRef.child(path).setValue(true)
+                                        }
+                                        shipAmount == 0 -> {
+                                            shipRank -= 1
+                                            shipAmount  = 4 - shipRank + 1
+                                            shipRankText.text = "Place $shipAmount ships of rank $shipRank"
                                         }
                                     }
                                 }
-                                infoRef.child(myFieldPath).setValue(cellsCoord)
-
-                                shipRankText.text = getString(R.string.ships_are_set)
-                                startPlay.visibility = VISIBLE
-                                viewModel.shipRects = allocField.shipRects
-                                val path = if(viewModel.playerNum == 1) "p1Ready" else "p2Ready"
-                                gameRef.child(path).setValue(true)
+                                else -> {
+                                    Toast.makeText(activity,"Can't locate ship here", Toast.LENGTH_SHORT).show()
+                                }
                             }
-                            else if(shipAmount == 0) {
-                                shipRank -= 1
-                                shipAmount  = 4 - shipRank + 1
-                                shipRankText.text = "Place $shipAmount ships of rank $shipRank"
-                            }
-                        } else {
-                            Toast.makeText(activity,"Can't locate ship here", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

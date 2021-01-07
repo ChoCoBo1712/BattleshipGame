@@ -53,14 +53,17 @@ class JoinGameFragment : Fragment() {
             val gameRef = db.getReference("games/${gameId}")
             gameRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        gameRef.child("player2").setValue(viewModel.userId)
-                        viewModel.playerNum = 2
-                        viewModel.gameId = gameId
-                        findNavController().navigate(R.id.action_joinGameFragment_to_allocateFragment)
+                    when {
+                        snapshot.exists() -> {
+                            gameRef.child("player2").setValue(viewModel.userId)
+                            viewModel.playerNum = 2
+                            viewModel.gameId = gameId
+                            findNavController().navigate(R.id.action_joinGameFragment_to_allocateFragment)
 
-                    } else {
-                        Toast.makeText(activity, "No such game", Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {
+                            Toast.makeText(activity, "No such game", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
 
