@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.DatabaseReference
@@ -21,10 +22,11 @@ import kotlin.random.Random
 
 class CreateGameFragment : Fragment() {
 
+    private val viewModel: ViewModel by activityViewModels()
+
     private lateinit var startGame: Button
     private lateinit var gameIdText: TextView
 
-    private lateinit var viewModel: ViewModel
     private lateinit var db: FirebaseDatabase
     private lateinit var gamesRef: DatabaseReference
 
@@ -33,10 +35,6 @@ class CreateGameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = activity?.run {
-            ViewModelProvider(this)[ViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
-
         db = FirebaseDatabase.getInstance()
         gamesRef = db.getReference("games")
 

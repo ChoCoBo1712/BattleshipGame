@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
@@ -17,18 +18,15 @@ import com.example.battleshipgame.viewmodels.ViewModel
 
 class ResultFragment : Fragment() {
 
+    private val viewModel: ViewModel by activityViewModels()
+
     private lateinit var backToMenu: Button
     private lateinit var resText: TextView
-
-    private lateinit var viewModel: ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = activity?.run {
-            ViewModelProvider(this)[ViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
         return inflater.inflate(R.layout.fragment_result, container, false)
     }
 

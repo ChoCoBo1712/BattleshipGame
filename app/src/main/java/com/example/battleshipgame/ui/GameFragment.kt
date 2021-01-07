@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.*
@@ -25,7 +26,7 @@ import com.squareup.picasso.Picasso
 
 class GameFragment : Fragment() {
 
-    lateinit var viewModel: ViewModel
+    private val viewModel: ViewModel by activityViewModels()
 
     private lateinit var db: FirebaseDatabase
     private lateinit var gameRef: DatabaseReference
@@ -42,15 +43,9 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = activity?.run {
-            ViewModelProvider(this)[ViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
-
-
         db = FirebaseDatabase.getInstance()
         gameRef = db.getReference("games/${viewModel.gameId}")
         infoRef = db.getReference("cells/${viewModel.gameId}")
-
 
         return inflater.inflate(R.layout.fragment_game, container, false)
     }

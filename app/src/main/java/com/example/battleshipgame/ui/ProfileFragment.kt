@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.battleshipgame.Constants.Companion.PICK_IMAGE_CODE
@@ -32,7 +33,7 @@ import java.io.ByteArrayOutputStream
 
 class ProfileFragment : Fragment() {
 
-    lateinit var viewModel: ViewModel
+    private val viewModel: ViewModel by activityViewModels()
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -58,10 +59,6 @@ class ProfileFragment : Fragment() {
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
         auth = FirebaseAuth.getInstance()
-
-        viewModel = requireActivity().run {
-            ViewModelProvider(this)[ViewModel::class.java]
-        }
 
         db = FirebaseDatabase.getInstance()
         userRef = db.getReference("users/${viewModel.userId}")
@@ -157,8 +154,5 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
-
-
     }
-
 }

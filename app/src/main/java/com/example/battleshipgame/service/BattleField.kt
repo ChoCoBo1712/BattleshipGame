@@ -21,7 +21,7 @@ class BattleField: View {
         withShips = a.getBoolean(R.styleable.BattleField_withShips, false)
     }
 
-    private val gSize = 10   // grid dimension
+    private val gSize = 10
     private var withShips: Boolean = false
 
     var shipRects = mutableListOf<RectF>()
@@ -76,12 +76,10 @@ class BattleField: View {
         cellWidth = width.toFloat() / gSize
         cellHeight = height.toFloat() / gSize
 
-        // vertical lines
         for (i in 0..gSize) {
             canvas.drawLine(i * cellWidth, 0f, i * cellWidth, height.toFloat(), gridPaint)
         }
 
-        // horizontal lines
         for (i in 0..gSize) {
             canvas.drawLine(0f, i * cellHeight, width.toFloat(), i * cellHeight, gridPaint)
         }
@@ -93,7 +91,7 @@ class BattleField: View {
         val right: Float
         val bottom: Float
 
-        if (orientation == Orientation.HORIZONTAL) {  // horizontal
+        if (orientation == Orientation.HORIZONTAL) {
             right = (i + rank - 1 + 0.75f) * cellWidth
             bottom = (j + 0.75f) * cellHeight
         } else {

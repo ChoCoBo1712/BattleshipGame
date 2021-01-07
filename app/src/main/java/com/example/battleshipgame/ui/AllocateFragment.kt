@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -26,9 +27,10 @@ import com.example.battleshipgame.viewmodels.ViewModel
 
 class AllocateFragment : Fragment() {
 
+    private val viewModel: ViewModel by activityViewModels()
+
     private var orientation: Orientation = Orientation.HORIZONTAL
     private lateinit var allocField: BattleField
-    private lateinit var toggleGroup: MaterialButtonToggleGroup
     private lateinit var horizontal: Button
     private lateinit var vertical: Button
     private lateinit var shipRankText: TextView
@@ -38,8 +40,6 @@ class AllocateFragment : Fragment() {
     private lateinit var gameRef: DatabaseReference
     private lateinit var infoRef: DatabaseReference
 
-    lateinit var viewModel: ViewModel
-
     var shipRank = 5
     var shipAmount = 5 - shipRank + 1
 
@@ -47,10 +47,6 @@ class AllocateFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = activity?.run {
-            ViewModelProvider(this)[ViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
-
         db = FirebaseDatabase.getInstance()
         gameRef = db.getReference("games/${viewModel.gameId}")
         infoRef = db.getReference("cells/${viewModel.gameId}")
@@ -84,11 +80,11 @@ class AllocateFragment : Fragment() {
                                 Toast.makeText(activity,"No more ships", Toast.LENGTH_SHORT).show()
 
                                 val myFieldPath = if (viewModel.playerNum == 1) "p1" else "p2"
-                                var cellsCoord = mutableListOf<Pair<Int, Int>>()
-                                for (i in 0..9) {
-                                    for (j in 0..9) {
-                                        if(viewModel.myCells[i][j].isShip) {
-                                            cellsCoord.add(Pair(i, j))
+                                val cellsCoord = mutableListOf<Pair<Int, Int>>()
+                                for (x in 0..9) {
+                                    for (y in 0..9) {
+                                        if(viewModel.myCells[x][y].isShip) {
+                                            cellsCoord.add(Pair(x, y))
                                         }
                                     }
                                 }
@@ -138,12 +134,10 @@ class AllocateFragment : Fragment() {
 
         if(orientation == Orientation.HORIZONTAL) {
 
-            // check if ship fit in field
             if (i + rank - 1 > 9) {
                 return false
             }
 
-            // check surroundings
             for (x in i until i + rank) {
                 if(viewModel.myCells[x][j].isShip) {
                     return false
@@ -174,7 +168,6 @@ class AllocateFragment : Fragment() {
                     }
                 }
             }
-            // x_len + 1
             if (i + rank < 10) {
                 if(viewModel.myCells[i + rank][j].isShip) {
                     return false
@@ -191,8 +184,7 @@ class AllocateFragment : Fragment() {
                 }
             }
 
-            // placing ship
-            var newShip = Ship()
+            val newShip = Ship()
             newShip.rank = shipRank
             newShip.orientation = orientation
             for (x in i until i + rank) {
@@ -203,7 +195,6 @@ class AllocateFragment : Fragment() {
             }
             viewModel.myShips.add(newShip)
         } else {
-            // vertical align
             if (j + rank - 1 > 9) {
                 return false
             }
@@ -256,7 +247,7 @@ class AllocateFragment : Fragment() {
                 }
             }
 
-            var newShip = Ship()
+            val newShip = Ship()
             newShip.rank = shipRank
             newShip.orientation = orientation
             for (y in j until j + rank) {
@@ -281,5 +272,4 @@ class AllocateFragment : Fragment() {
             override fun onCancelled(databaseError: DatabaseError) {}
         })
     }
-
 }

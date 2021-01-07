@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.DataSnapshot
@@ -21,7 +22,7 @@ import com.example.battleshipgame.viewmodels.ViewModel
 
 class JoinGameFragment : Fragment() {
 
-    lateinit var viewModel: ViewModel
+    private val viewModel: ViewModel by activityViewModels()
 
     lateinit var joinGame: Button
     lateinit var gameIdInput: EditText
@@ -32,10 +33,6 @@ class JoinGameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = activity?.run {
-            ViewModelProvider(this)[ViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
-
         db = FirebaseDatabase.getInstance()
 
         return inflater.inflate(R.layout.fragment_join_game, container, false)

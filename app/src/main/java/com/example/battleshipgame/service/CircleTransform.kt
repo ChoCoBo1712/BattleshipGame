@@ -28,7 +28,7 @@ class CircleTransform : Transformation {
         return bitmap
     }
 
-    override fun key(): String? {
+    override fun key(): String {
         return "circle"
     }
 }
