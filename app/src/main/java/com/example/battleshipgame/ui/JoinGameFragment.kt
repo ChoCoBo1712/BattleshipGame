@@ -16,12 +16,12 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.example.battleshipgame.R
-import com.example.battleshipgame.viewmodels.GameViewModel
+import com.example.battleshipgame.viewmodels.ViewModel
 
 
 class JoinGameFragment : Fragment() {
 
-    lateinit var viewModel: GameViewModel
+    lateinit var viewModel: ViewModel
 
     lateinit var joinGame: Button
     lateinit var gameIdInput: EditText
@@ -33,7 +33,7 @@ class JoinGameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = activity?.run {
-            ViewModelProvider(this)[GameViewModel::class.java]
+            ViewModelProvider(this)[ViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
         db = FirebaseDatabase.getInstance()

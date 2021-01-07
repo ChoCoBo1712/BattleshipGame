@@ -83,7 +83,7 @@
     </fragment>
     <fragment
         android:id="@+id/statsFragment"
-        android:name="com.example.battleshipgame.ui.StatsFragment"
+        android:name="com.example.battleshipgame.ui.ProfileFragment"
         android:label="fragment_stats"
-        tools:layout="@layout/fragment_stats" />
+        tools:layout="@layout/fragment_profile" />
 </navigation>

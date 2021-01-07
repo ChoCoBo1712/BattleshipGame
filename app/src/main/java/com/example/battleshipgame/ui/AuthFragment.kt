@@ -22,18 +22,15 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 import com.example.battleshipgame.R
-import com.example.battleshipgame.viewmodels.GameViewModel
+import com.example.battleshipgame.viewmodels.ViewModel
+import com.squareup.picasso.Picasso
 
 class AuthFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
-
     private lateinit var googleSignInClient: GoogleSignInClient
-
     private lateinit var signInBtn: SignInButton
-
-    private lateinit var viewModel: GameViewModel
-
+    private lateinit var viewModel: ViewModel
     private lateinit var db: FirebaseDatabase
     private lateinit var usersRef: DatabaseReference
 
@@ -46,16 +43,15 @@ class AuthFragment : Fragment() {
             .requestEmail()
             .build()
 
-        viewModel = activity?.run {
-            ViewModelProvider(this)[GameViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
+        viewModel = requireActivity().run {
+            ViewModelProvider(this)[ViewModel::class.java]
+        }
 
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-
         db = FirebaseDatabase.getInstance()
         usersRef = db.getReference("users")
-
         auth = FirebaseAuth.getInstance()
+
         return inflater.inflate(R.layout.fragment_auth, container, false)
     }
 
@@ -84,6 +80,7 @@ class AuthFragment : Fragment() {
                     firebaseAuthWithGoogle(account!!)
                     usersRef.child(viewModel.userId).child("all").setValue(0)
                     usersRef.child(viewModel.userId).child("wins").setValue(0)
+                    usersRef.child(viewModel.userId).child("image").setValue("https://firebasestorage.googleapis.com/v0/b/battleshipgame17.appspot.com/o/default.jpg?alt=media&token=273b1889-f360-45cd-887e-862201c2af17")
                     Log.w(TAG, "Login successful, go to opt fragment")
 
                 } catch (e: ApiException) {
@@ -126,5 +123,4 @@ class AuthFragment : Fragment() {
         private const val TAG = "AuthFragment"
         private const val RC_SIGN_IN = 9001
     }
-
 }

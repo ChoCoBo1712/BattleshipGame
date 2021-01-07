@@ -6,7 +6,7 @@ import com.example.battleshipgame.service.Cell
 import com.example.battleshipgame.service.Game
 import com.example.battleshipgame.service.Ship
 
-class GameViewModel: ViewModel() {
+class ViewModel: ViewModel() {
 
     var playerNum: Int = 0
     var userId: String = ""

@@ -5,7 +5,6 @@
     <string name="new_game">New game</string>
     <string name="join_game">Join game</string>
     <string name="game_id">Game ID</string>
-    <string name="view_games_statistics">Games statistics</string>
     <string name="sign_out">Sign out</string>
     <string name="arrow_right">→</string>
     <string name="arrow_down">↓</string>
@@ -19,4 +18,6 @@
     <string name="your_move">Your move now</string>
     <string name="opp_move">Opponent\'s move</string>
     <string name="you_won">You won!</string>
+    <string name="profile_info">Profile info</string>
+    <string name="upload_image">Upload image</string>
 </resources>

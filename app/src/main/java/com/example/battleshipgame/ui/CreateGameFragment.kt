@@ -15,7 +15,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 import com.example.battleshipgame.R
 import com.example.battleshipgame.service.Game
-import com.example.battleshipgame.viewmodels.GameViewModel
+import com.example.battleshipgame.viewmodels.ViewModel
 import kotlin.random.Random
 
 
@@ -24,7 +24,7 @@ class CreateGameFragment : Fragment() {
     private lateinit var startGame: Button
     private lateinit var gameIdText: TextView
 
-    private lateinit var viewModel: GameViewModel
+    private lateinit var viewModel: ViewModel
     private lateinit var db: FirebaseDatabase
     private lateinit var gamesRef: DatabaseReference
 
@@ -34,7 +34,7 @@ class CreateGameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = activity?.run {
-            ViewModelProvider(this)[GameViewModel::class.java]
+            ViewModelProvider(this)[ViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
         db = FirebaseDatabase.getInstance()

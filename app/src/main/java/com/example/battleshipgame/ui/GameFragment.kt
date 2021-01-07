@@ -17,12 +17,12 @@ import com.example.battleshipgame.service.BattleField
 
 import com.example.battleshipgame.R
 import com.example.battleshipgame.service.CellState
-import com.example.battleshipgame.viewmodels.GameViewModel
+import com.example.battleshipgame.viewmodels.ViewModel
 
 
 class GameFragment : Fragment() {
 
-    lateinit var viewModel: GameViewModel
+    lateinit var viewModel: ViewModel
 
     private lateinit var db: FirebaseDatabase
     private lateinit var gameRef: DatabaseReference
@@ -40,7 +40,7 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = activity?.run {
-            ViewModelProvider(this)[GameViewModel::class.java]
+            ViewModelProvider(this)[ViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
 

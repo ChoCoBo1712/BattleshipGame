@@ -21,24 +21,24 @@ import com.example.battleshipgame.service.BattleField
 import com.example.battleshipgame.R
 import com.example.battleshipgame.service.Orientation
 import com.example.battleshipgame.service.Ship
-import com.example.battleshipgame.viewmodels.GameViewModel
+import com.example.battleshipgame.viewmodels.ViewModel
 
 
 class AllocateFragment : Fragment() {
 
-    var orientation: Orientation = Orientation.HORIZONTAL
-    lateinit var allocField: BattleField
-    lateinit var toggleGroup: MaterialButtonToggleGroup
-    lateinit var horizontal: Button
-    lateinit var vertical: Button
-    lateinit var shipRankText: TextView
-    lateinit var startPlay: Button
+    private var orientation: Orientation = Orientation.HORIZONTAL
+    private lateinit var allocField: BattleField
+    private lateinit var toggleGroup: MaterialButtonToggleGroup
+    private lateinit var horizontal: Button
+    private lateinit var vertical: Button
+    private lateinit var shipRankText: TextView
+    private lateinit var startPlay: Button
 
     private lateinit var db: FirebaseDatabase
     private lateinit var gameRef: DatabaseReference
     private lateinit var infoRef: DatabaseReference
 
-    lateinit var viewModel: GameViewModel
+    lateinit var viewModel: ViewModel
 
     var shipRank = 5
     var shipAmount = 5 - shipRank + 1
@@ -48,7 +48,7 @@ class AllocateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = activity?.run {
-            ViewModelProvider(this)[GameViewModel::class.java]
+            ViewModelProvider(this)[ViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
         db = FirebaseDatabase.getInstance()

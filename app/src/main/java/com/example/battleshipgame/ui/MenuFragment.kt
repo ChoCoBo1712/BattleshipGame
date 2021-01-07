@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -16,7 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 
 import com.example.battleshipgame.R
-import com.example.battleshipgame.viewmodels.GameViewModel
+import com.example.battleshipgame.viewmodels.ViewModel
 
 class MenuFragment : Fragment() {
 
@@ -24,12 +23,12 @@ class MenuFragment : Fragment() {
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
-    private lateinit var signOutTv: TextView
-    private lateinit var statsTv: TextView
+    private lateinit var signOut: Button
+    private lateinit var stats: Button
     private lateinit var startNewGame: Button
     private lateinit var joinGame: Button
 
-    lateinit var viewModel: GameViewModel
+    lateinit var viewModel: ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +42,7 @@ class MenuFragment : Fragment() {
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
         viewModel = activity?.run {
-            ViewModelProvider(this)[GameViewModel::class.java]
+            ViewModelProvider(this)[ViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
         auth = FirebaseAuth.getInstance()
@@ -52,13 +51,13 @@ class MenuFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        signOutTv = view.findViewById(R.id.tv_sign_out)
-        signOutTv.setOnClickListener {
+        signOut = view.findViewById(R.id.tv_sign_out)
+        signOut.setOnClickListener {
             signOut()
         }
 
-        statsTv = view.findViewById(R.id.tv_game_stat)
-        statsTv.setOnClickListener {
+        stats = view.findViewById(R.id.tv_game_stat)
+        stats.setOnClickListener {
             findNavController().navigate(R.id.action_optionsFragment_to_statsFragment)
         }
 

@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.example.battleshipgame.R
-import com.example.battleshipgame.viewmodels.GameViewModel
+import com.example.battleshipgame.viewmodels.ViewModel
 
 
 class ResultFragment : Fragment() {
@@ -20,14 +20,14 @@ class ResultFragment : Fragment() {
     private lateinit var backToMenu: Button
     private lateinit var resText: TextView
 
-    private lateinit var viewModel: GameViewModel
+    private lateinit var viewModel: ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewModel = activity?.run {
-            ViewModelProvider(this)[GameViewModel::class.java]
+            ViewModelProvider(this)[ViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
         return inflater.inflate(R.layout.fragment_result, container, false)
     }
