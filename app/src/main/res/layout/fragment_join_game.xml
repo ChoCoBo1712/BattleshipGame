@@ -7,36 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".ui.JoinGameFragment">
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/id_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="150dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="116dp"
+    <EditText
+        android:id="@+id/game_id_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/game_id"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/game_id_input"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:hint="@string/game_id"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
 
 
     <Button
         android:id="@+id/btn_join_start"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_height="wrap_content"
         android:text="@string/start_game"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_input_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/game_id_input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
