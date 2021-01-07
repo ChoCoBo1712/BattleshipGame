@@ -18,4 +18,5 @@
     <string name="back_to_menu">Back to menu</string>
     <string name="your_move">Your move now</string>
     <string name="opp_move">Opponent\'s move</string>
+    <string name="you_won">You won!</string>
 </resources>
