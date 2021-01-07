@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">BattleshipGame</string>
+    <string name="tv_sign_in">Sign in</string>
+    <string name="start_game">Start game</string>
+    <string name="new_game">New game</string>
+    <string name="join_game">Join game</string>
+    <string name="game_id">Game ID</string>
+    <string name="view_games_statistics">Games statistics</string>
+    <string name="sign_out">Sign out</string>
+    <string name="arrow_right">→</string>
+    <string name="arrow_down">↓</string>
+    <string name="place_one_5_rank_ship">Place one 5 rank ship</string>
+    <string name="ships_are_set">All ships are set</string>
+    <string name="start">Start</string>
+    <string name="players_move">%s player\'s move</string>
+    <string name="stats_wins">%s wins</string>
+    <string name="stats_total">%s games played</string>
+    <string name="back_to_menu">Back to menu</string>
+    <string name="your_move">Your move now</string>
+    <string name="opp_move">Opponent\'s move</string>
 </resources>

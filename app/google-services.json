@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "180266189794",
+    "firebase_url": "https://battleshipgame17-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "battleshipgame17",
+    "storage_bucket": "battleshipgame17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180266189794:android:318e7a4218cfd4dc196fbb",
+        "android_client_info": {
+          "package_name": "com.example.battleshipgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180266189794-g4um7fhqk2u93mlngffktpp4ga0ifjgc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.battleshipgame",
+            "certificate_hash": "dba83859b377402e2e988f6cc8170dbc49db1b72"
+          }
+        },
+        {
+          "client_id": "180266189794-aa9383877l90j8ja3tjvv4jvivvon5c5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLOWXUpM49AuHf0KX3QxWIsS6v5O1u1ew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "180266189794-aa9383877l90j8ja3tjvv4jvivvon5c5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

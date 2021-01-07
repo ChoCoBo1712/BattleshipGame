@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/authFragment">
+
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.example.battleshipgame.ui.AuthFragment"
+        android:label="fragment_auth"
+        tools:layout="@layout/fragment_auth" >
+        <action
+            android:id="@+id/action_authFragment_to_optionsFragment"
+            app:destination="@id/optionsFragment"
+            app:popUpTo="@+id/nav_graph" />
+    </fragment>
+    <fragment
+        android:id="@+id/createGameFragment"
+        android:name="com.example.battleshipgame.ui.CreateGameFragment"
+        android:label="fragment_create_game"
+        tools:layout="@layout/fragment_create_game" >
+        <action
+            android:id="@+id/action_createGameFragment_to_allocateFragment"
+            app:destination="@id/allocateFragment"
+            app:popUpTo="@+id/optionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinGameFragment"
+        android:name="com.example.battleshipgame.ui.JoinGameFragment"
+        android:label="fragment_join_game"
+        tools:layout="@layout/fragment_join_game" >
+        <action
+            android:id="@+id/action_joinGameFragment_to_allocateFragment"
+            app:destination="@id/allocateFragment"
+            app:popUpTo="@+id/optionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allocateFragment"
+        android:name="com.example.battleshipgame.ui.AllocateFragment"
+        android:label="fragment_allocate"
+        tools:layout="@layout/fragment_allocate" >
+        <action
+            android:id="@+id/action_allocateFragment_to_gameFragment"
+            app:destination="@id/gameFragment"
+            app:popUpTo="@+id/optionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.example.battleshipgame.ui.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" >
+        <action
+            android:id="@+id/action_resultFragment_to_optionsFragment"
+            app:destination="@id/optionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.example.battleshipgame.ui.GameFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_gameFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/optionsFragment"
+        android:name="com.example.battleshipgame.ui.MenuFragment"
+        android:label="fragment_options"
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_optionsFragment_to_createGameFragment"
+            app:destination="@id/createGameFragment" />
+        <action
+            android:id="@+id/action_optionsFragment_to_joinGameFragment"
+            app:destination="@id/joinGameFragment" />
+        <action
+            android:id="@+id/action_optionsFragment_to_authFragment2"
+            app:destination="@id/authFragment" />
+        <action
+            android:id="@+id/action_optionsFragment_to_statsFragment"
+            app:destination="@id/statsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.example.battleshipgame.ui.StatsFragment"
+        android:label="fragment_stats"
+        tools:layout="@layout/fragment_stats" />
+</navigation>
