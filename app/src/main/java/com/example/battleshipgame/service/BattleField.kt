@@ -124,17 +124,17 @@ class BattleField: View {
     private fun drawMiss(canvas: Canvas, i: Int, j: Int) {
         cellWidth = width.toFloat() / gSize
         cellHeight = height.toFloat() / gSize
-        canvas.drawLine((i + 0.2f) * cellWidth, (j + 0.2f) * cellHeight,
-            (i + 0.8f) * cellWidth, (j + 0.8f) * cellHeight, missPaint)
-
-        canvas.drawLine((i + 0.8f) * cellWidth, (j + 0.2f) * cellHeight,
-            (i + 0.2f) * cellWidth, (j + 0.8f) * cellHeight, missPaint)
+        canvas.drawCircle((i + 0.5f) * cellWidth, (j + 0.5f) * cellHeight, 0.3f * cellWidth, hitPaint)
     }
 
     private fun drawHit(canvas: Canvas, i: Int, j: Int) {
         cellWidth = width.toFloat() / gSize
         cellHeight = height.toFloat() / gSize
-        canvas.drawCircle((i + 0.5f) * cellWidth, (j + 0.5f) * cellHeight, 0.3f * cellWidth, hitPaint)
+        canvas.drawLine((i + 0.2f) * cellWidth, (j + 0.2f) * cellHeight,
+            (i + 0.8f) * cellWidth, (j + 0.8f) * cellHeight, missPaint)
+
+        canvas.drawLine((i + 0.8f) * cellWidth, (j + 0.2f) * cellHeight,
+            (i + 0.2f) * cellWidth, (j + 0.8f) * cellHeight, missPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

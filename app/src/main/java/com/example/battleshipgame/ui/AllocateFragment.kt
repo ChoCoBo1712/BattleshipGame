@@ -40,8 +40,8 @@ class AllocateFragment : Fragment() {
     private lateinit var gameRef: DatabaseReference
     private lateinit var infoRef: DatabaseReference
 
-    var shipRank = 5
-    var shipAmount = 5 - shipRank + 1
+    var shipRank = 4
+    var shipAmount = 4 - shipRank + 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,7 +98,7 @@ class AllocateFragment : Fragment() {
                             }
                             else if(shipAmount == 0) {
                                 shipRank -= 1
-                                shipAmount  = 5 - shipRank + 1
+                                shipAmount  = 4 - shipRank + 1
                                 shipRankText.text = "Place $shipAmount ships of rank $shipRank"
                             }
                         } else {
@@ -127,7 +127,7 @@ class AllocateFragment : Fragment() {
 
     private fun checkShipLocation(i: Int, j: Int, orientation: Orientation, rank: Int): Boolean {
 
-        if(shipAmount == 6) {
+        if(shipAmount == 5) {
             Toast.makeText(activity, "No more ships", Toast.LENGTH_SHORT).show()
             return false
         }
