@@ -14,9 +14,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.battleshipgame.Constants.Companion.PICK_IMAGE_CODE
+import com.example.battleshipgame.service.Constants.Companion.PICK_IMAGE_CODE
 import com.example.battleshipgame.R
 import com.example.battleshipgame.service.CircleTransform
 import com.example.battleshipgame.service.Gravatar

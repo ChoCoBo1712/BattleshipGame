@@ -8,9 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.battleshipgame.Constants.Companion.DEFAULT_IMAGE
+import com.example.battleshipgame.service.Constants.Companion.DEFAULT_IMAGE
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -23,8 +24,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 import com.example.battleshipgame.R
+import com.example.battleshipgame.service.Constants.Companion.GOOGLE_SIGN_IN
 import com.example.battleshipgame.viewmodels.ViewModel
-import com.squareup.picasso.Picasso
 
 class AuthFragment : Fragment() {
 
@@ -74,7 +75,7 @@ class AuthFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-            RC_SIGN_IN -> {
+            GOOGLE_SIGN_IN -> {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 try {
                     val account = task.getResult(ApiException::class.java)
@@ -83,47 +84,36 @@ class AuthFragment : Fragment() {
                     usersRef.child(viewModel.userId).child("wins").setValue(0)
                     usersRef.child(viewModel.userId).child("image").setValue(DEFAULT_IMAGE)
                     usersRef.child(viewModel.userId).child("email").setValue(account.email)
-                    Log.w(TAG, "Login successful, go to opt fragment")
-
                 } catch (e: ApiException) {
-                    Log.w(TAG, "Google sign in failed", e)
+                    Toast.makeText(requireContext(), "Sign in failed", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.id!!)
-
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d(TAG, "signInWithCredential:success")
                     goToOptionsFragment()
                 } else {
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(requireContext(), "Sign in failed", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
     private fun signIn() {
         val signInIntent =  googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
     }
 
     private fun goToOptionsFragment() {
         val user = auth.currentUser
-        Log.w(TAG, "User is $user")
         if (user != null) {
             viewModel.userId = user.uid
             viewModel.userEmail = user.email.toString()
             findNavController().navigate(R.id.action_authFragment_to_menuFragment)
         }
-    }
-
-    companion object {
-        private const val TAG = "AuthFragment"
-        private const val RC_SIGN_IN = 9001
     }
 }

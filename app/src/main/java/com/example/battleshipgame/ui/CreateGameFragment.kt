@@ -9,13 +9,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 import com.example.battleshipgame.R
-import com.example.battleshipgame.service.Game
+import com.example.battleshipgame.viewmodels.GameViewModel
 import com.example.battleshipgame.viewmodels.ViewModel
 import kotlin.random.Random
 
@@ -58,8 +57,8 @@ class CreateGameFragment : Fragment() {
         val gameId = Random.nextInt(1, 1000000)
         gameIdText.text = "$gameId"
         viewModel.gameId = gameId
-        val game = Game(player1 = viewModel.userId)
-        viewModel.game = game
+        val game = GameViewModel(player1 = viewModel.userId)
+        viewModel.gameViewModel = game
         gamesRef.child("$gameId").setValue(game)
     }
 

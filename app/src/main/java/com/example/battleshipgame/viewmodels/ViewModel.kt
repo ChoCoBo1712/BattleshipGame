@@ -3,7 +3,6 @@ package com.example.battleshipgame.viewmodels
 import android.graphics.RectF
 import androidx.lifecycle.ViewModel
 import com.example.battleshipgame.service.Cell
-import com.example.battleshipgame.service.Game
 import com.example.battleshipgame.service.Ship
 
 class ViewModel: ViewModel() {
@@ -12,7 +11,7 @@ class ViewModel: ViewModel() {
     var userId: String = ""
     var userEmail: String = ""
     var gameId: Int = -1
-    var game: Game? = null
+    var gameViewModel: GameViewModel? = null
     var moveNum: Int = 1
     var winnerNum: Int = 0
 
@@ -26,7 +25,7 @@ class ViewModel: ViewModel() {
     fun clear() {
         playerNum = 0
         gameId = 0
-        game = null
+        gameViewModel = null
         myCells = Array(10) { Array(10) { Cell() } }
         oppCells = Array(10) { Array(10) { Cell() } }
         shipRects = mutableListOf()

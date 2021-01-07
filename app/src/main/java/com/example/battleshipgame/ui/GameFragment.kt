@@ -68,7 +68,6 @@ class GameFragment : Fragment() {
             override fun onCancelled(p0: DatabaseError) { }
 
             override fun onDataChange(snap: DataSnapshot) {
-                Log.d(TAG, "${snap.childrenCount}")
                 for (cell in snap.children) {
                     var i = cell.child("first").getValue(Int::class.java)
                     var j = cell.child("second").getValue(Int::class.java)
@@ -148,8 +147,6 @@ class GameFragment : Fragment() {
 
             override fun onCancelled(p0: DatabaseError) {}
         })
-
-        Log.d(TAG, "Init ended")
     }
 
     private fun makeMove(i: Int, j: Int) {
@@ -213,9 +210,5 @@ class GameFragment : Fragment() {
 
     private fun navigateToRes() {
         findNavController().navigate(R.id.action_gameFragment_to_resultFragment)
-    }
-
-    companion object {
-        const val TAG = "GameFragment"
     }
 }

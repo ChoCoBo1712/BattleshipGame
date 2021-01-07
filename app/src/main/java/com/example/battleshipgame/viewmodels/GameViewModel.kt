@@ -1,6 +1,6 @@
-package com.example.battleshipgame.service
+package com.example.battleshipgame.viewmodels
 
-data class Game(
+data class GameViewModel(
     var player1: String = "",
     var player2: String = "",
     var move: Int = 1,

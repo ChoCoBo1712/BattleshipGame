@@ -7,3 +7,6 @@ class Cell {
     var isShip: Boolean = false
 }
 
+enum class CellState {
+    EMPTY, HIT, MISS
+}

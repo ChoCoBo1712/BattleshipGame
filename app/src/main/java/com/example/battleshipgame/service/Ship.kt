@@ -9,3 +9,7 @@ class Ship {
         return cells.all { cell -> cell.state == CellState.HIT }
     }
 }
+
+enum class Orientation {
+    HORIZONTAL, VERTICAL
+}
