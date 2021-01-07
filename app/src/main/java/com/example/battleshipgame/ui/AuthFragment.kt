@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.battleshipgame.Constants.Companion.DEFAULT_IMAGE
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -80,7 +81,8 @@ class AuthFragment : Fragment() {
                     firebaseAuthWithGoogle(account!!)
                     usersRef.child(viewModel.userId).child("all").setValue(0)
                     usersRef.child(viewModel.userId).child("wins").setValue(0)
-                    usersRef.child(viewModel.userId).child("image").setValue("https://firebasestorage.googleapis.com/v0/b/battleshipgame17.appspot.com/o/default.jpg?alt=media&token=273b1889-f360-45cd-887e-862201c2af17")
+                    usersRef.child(viewModel.userId).child("image").setValue(DEFAULT_IMAGE)
+                    usersRef.child(viewModel.userId).child("email").setValue(account.email)
                     Log.w(TAG, "Login successful, go to opt fragment")
 
                 } catch (e: ApiException) {
@@ -115,7 +117,8 @@ class AuthFragment : Fragment() {
         Log.w(TAG, "User is $user")
         if (user != null) {
             viewModel.userId = user.uid
-            findNavController().navigate(R.id.action_authFragment_to_optionsFragment)
+            viewModel.userEmail = user.email.toString()
+            findNavController().navigate(R.id.action_authFragment_to_menuFragment)
         }
     }
 

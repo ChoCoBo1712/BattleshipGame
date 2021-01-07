@@ -38,13 +38,13 @@ class ResultFragment : Fragment() {
         resText = view.findViewById(R.id.tv_result)
 
         if (viewModel.playerNum == viewModel.winnerNum) {
-            resText.text = "You're a winner!"
+            resText.setText(R.string.you_won)
         } else {
-            resText.text = "Defeat"
+            resText.setText(R.string.defeat)
         }
 
         backToMenu.setOnClickListener {
-            findNavController().navigate(R.id.action_resultFragment_to_optionsFragment)
+            findNavController().navigate(R.id.action_resultFragment_to_menuFragment)
         }
     }
 }

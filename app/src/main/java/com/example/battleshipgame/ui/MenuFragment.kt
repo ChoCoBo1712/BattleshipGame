@@ -19,56 +19,39 @@ import com.example.battleshipgame.viewmodels.ViewModel
 
 class MenuFragment : Fragment() {
 
-    private lateinit var auth: FirebaseAuth
-
-    private lateinit var googleSignInClient: GoogleSignInClient
-
-    private lateinit var signOut: Button
     private lateinit var stats: Button
     private lateinit var startNewGame: Button
     private lateinit var joinGame: Button
 
-    lateinit var viewModel: ViewModel
+    private lateinit var viewModel: ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-
-        viewModel = activity?.run {
+        viewModel = requireActivity().run {
             ViewModelProvider(this)[ViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
+        }
 
-        auth = FirebaseAuth.getInstance()
         return inflater.inflate(R.layout.fragment_menu, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        signOut = view.findViewById(R.id.tv_sign_out)
-        signOut.setOnClickListener {
-            signOut()
-        }
 
         stats = view.findViewById(R.id.tv_game_stat)
         stats.setOnClickListener {
-            findNavController().navigate(R.id.action_optionsFragment_to_statsFragment)
+            findNavController().navigate(R.id.action_menuFragment_to_profileFragment)
         }
 
         startNewGame = view.findViewById(R.id.btn_start_new_game)
         startNewGame.setOnClickListener {
-            findNavController().navigate(R.id.action_optionsFragment_to_createGameFragment)
+            findNavController().navigate(R.id.action_menuFragment_to_createGameFragment)
         }
 
         joinGame = view.findViewById(R.id.btn_join_game)
         joinGame.setOnClickListener {
-            findNavController().navigate(R.id.action_optionsFragment_to_joinGameFragment)
+            findNavController().navigate(R.id.action_menuFragment_to_joinGameFragment)
         }
     }
 
@@ -76,14 +59,4 @@ class MenuFragment : Fragment() {
         super.onStart()
         viewModel.clear()
     }
-
-
-    private fun signOut() {
-        auth.signOut()
-
-        googleSignInClient.signOut().addOnCompleteListener {
-            findNavController().navigate(R.id.action_optionsFragment_to_authFragment2)
-        }
-    }
-
 }

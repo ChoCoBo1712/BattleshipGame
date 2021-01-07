@@ -10,6 +10,7 @@ class ViewModel: ViewModel() {
 
     var playerNum: Int = 0
     var userId: String = ""
+    var userEmail: String = ""
     var gameId: Int = -1
     var game: Game? = null
     var moveNum: Int = 1

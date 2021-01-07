@@ -20,4 +20,6 @@
     <string name="you_won">You won!</string>
     <string name="profile_info">Profile info</string>
     <string name="upload_image">Upload image</string>
+    <string name="defeat">Defeat</string>
+    <string name="gravatar_image">Gravatar image</string>
 </resources>

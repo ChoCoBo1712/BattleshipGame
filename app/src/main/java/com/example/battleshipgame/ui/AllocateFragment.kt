@@ -58,7 +58,6 @@ class AllocateFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_allocate, container, false)
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

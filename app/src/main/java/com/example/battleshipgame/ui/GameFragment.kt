@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -17,7 +18,9 @@ import com.example.battleshipgame.service.BattleField
 
 import com.example.battleshipgame.R
 import com.example.battleshipgame.service.CellState
+import com.example.battleshipgame.service.CircleTransform
 import com.example.battleshipgame.viewmodels.ViewModel
+import com.squareup.picasso.Picasso
 
 
 class GameFragment : Fragment() {
@@ -28,9 +31,9 @@ class GameFragment : Fragment() {
     private lateinit var gameRef: DatabaseReference
     private lateinit var infoRef: DatabaseReference
 
-    lateinit var moveNumText: TextView
-    lateinit var myField: BattleField
-    lateinit var userField: BattleField
+    private lateinit var moveNumText: TextView
+    private lateinit var myField: BattleField
+    private lateinit var userField: BattleField
 
     private var isInit: Boolean = true
 
@@ -63,7 +66,6 @@ class GameFragment : Fragment() {
         myField.shipRects = viewModel.shipRects
         myField.cells = viewModel.myCells
         userField.cells = viewModel.oppCells
-
 
         val oppFieldPath = if (viewModel.playerNum == 1) "p2" else "p1"
 
@@ -110,7 +112,6 @@ class GameFragment : Fragment() {
                     } else {
                         moveNumText.text = getString(R.string.opp_move)
                     }
-
                 } else {
                     if(viewModel.winnerNum == viewModel.playerNum) {
                         return
@@ -131,7 +132,6 @@ class GameFragment : Fragment() {
             }
 
             override fun onCancelled(p0: DatabaseError) {}
-
         })
 
         val opp = if(viewModel.playerNum == 1) "2" else "1"

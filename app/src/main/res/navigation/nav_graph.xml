@@ -11,8 +11,8 @@
         android:label="fragment_auth"
         tools:layout="@layout/fragment_auth" >
         <action
-            android:id="@+id/action_authFragment_to_optionsFragment"
-            app:destination="@id/optionsFragment"
+            android:id="@+id/action_authFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
             app:popUpTo="@+id/nav_graph" />
     </fragment>
     <fragment
@@ -51,8 +51,8 @@
         android:label="fragment_result"
         tools:layout="@layout/fragment_result" >
         <action
-            android:id="@+id/action_resultFragment_to_optionsFragment"
-            app:destination="@id/optionsFragment" />
+            android:id="@+id/action_resultFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
@@ -64,26 +64,26 @@
             app:destination="@id/resultFragment" />
     </fragment>
     <fragment
-        android:id="@+id/optionsFragment"
+        android:id="@+id/menuFragment"
         android:name="com.example.battleshipgame.ui.MenuFragment"
         android:label="fragment_options"
         tools:layout="@layout/fragment_menu" >
         <action
-            android:id="@+id/action_optionsFragment_to_createGameFragment"
+            android:id="@+id/action_menuFragment_to_createGameFragment"
             app:destination="@id/createGameFragment" />
         <action
-            android:id="@+id/action_optionsFragment_to_joinGameFragment"
+            android:id="@+id/action_menuFragment_to_joinGameFragment"
             app:destination="@id/joinGameFragment" />
         <action
-            android:id="@+id/action_optionsFragment_to_authFragment2"
-            app:destination="@id/authFragment" />
-        <action
-            android:id="@+id/action_optionsFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
+            android:id="@+id/action_menuFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/statsFragment"
+        android:id="@+id/profileFragment"
         android:name="com.example.battleshipgame.ui.ProfileFragment"
         android:label="fragment_stats"
         tools:layout="@layout/fragment_profile" />
+    <action
+        android:id="@+id/action_profileFragment_to_authFragment"
+        app:destination="@id/authFragment" />
 </navigation>
