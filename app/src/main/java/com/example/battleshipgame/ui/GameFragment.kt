@@ -3,25 +3,20 @@ package com.example.battleshipgame.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.*
-import com.example.battleshipgame.service.BattleField
+import com.example.battleshipgame.service.BattleView
 
 import com.example.battleshipgame.R
 import com.example.battleshipgame.service.CellState
-import com.example.battleshipgame.service.CircleTransform
 import com.example.battleshipgame.viewmodels.ViewModel
-import com.squareup.picasso.Picasso
 
 
 class GameFragment : Fragment() {
@@ -32,8 +27,8 @@ class GameFragment : Fragment() {
     private lateinit var gameRef: DatabaseReference
     private lateinit var infoRef: DatabaseReference
     private lateinit var moveNumText: TextView
-    private lateinit var myField: BattleField
-    private lateinit var userField: BattleField
+    private lateinit var myField: BattleView
+    private lateinit var userField: BattleView
     private var isInit: Boolean = true
 
 

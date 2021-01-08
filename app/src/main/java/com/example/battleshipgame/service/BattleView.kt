@@ -12,47 +12,39 @@ import androidx.core.content.ContextCompat
 import com.example.battleshipgame.R
 
 
-class BattleField: View {
-
-    @SuppressLint("Recycle")
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        val a = context!!.obtainStyledAttributes(attrs, R.styleable.BattleField)
-
-        withShips = a.getBoolean(R.styleable.BattleField_withShips, false)
-    }
+class BattleView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     private val gSize = 10
     private var withShips: Boolean = false
     var shipRects = mutableListOf<RectF>()
     var cells = Array(10) { Array(10) { Cell() } }
-    var cellWidth: Float = 0.0f
-    var cellHeight: Float = 0.0f
+    var cellWidth: Float = 0.0F
+    var cellHeight: Float = 0.0F
     private val gridPaint = Paint()
     private val shipPaint = Paint()
     private val hitPaint = Paint()
     private val missPaint = Paint()
 
     init {
-        gridPaint.color =
-            ContextCompat.getColor(context, R.color.purple_500)
+        val a = context.obtainStyledAttributes(attrs, R.styleable.BattleView)
+        withShips = a.getBoolean(R.styleable.BattleView_withShips, false)
+
+        gridPaint.color = ContextCompat.getColor(context, R.color.purple_500)
         gridPaint.isAntiAlias = true
         gridPaint.style = Paint.Style.STROKE
         gridPaint.strokeWidth = resources.displayMetrics.density * 2
 
-        shipPaint.color =
-            ContextCompat.getColor(context, R.color.purple_700)
+        shipPaint.color = ContextCompat.getColor(context, R.color.purple_700)
         shipPaint.isAntiAlias = true
         shipPaint.style = Paint.Style.FILL
         shipPaint.strokeWidth = resources.displayMetrics.density * 2
 
-        hitPaint.color =
-            ContextCompat.getColor(context, R.color.red)
+        hitPaint.color = ContextCompat.getColor(context, R.color.red)
         hitPaint.isAntiAlias = true
         hitPaint.style = Paint.Style.FILL
         hitPaint.strokeWidth = resources.displayMetrics.density * 2
 
-        missPaint.color =
-            ContextCompat.getColor(context, R.color.blue)
+        missPaint.color = ContextCompat.getColor(context, R.color.blue)
         missPaint.isAntiAlias = true
         missPaint.style = Paint.Style.FILL
         missPaint.strokeWidth = resources.displayMetrics.density * 4
@@ -67,34 +59,33 @@ class BattleField: View {
         drawCells(canvas)
     }
 
-
     private fun drawGrid(canvas: Canvas) {
         cellWidth = width.toFloat() / gSize
         cellHeight = height.toFloat() / gSize
 
         for (i in 0..gSize) {
-            canvas.drawLine(i * cellWidth, 0f, i * cellWidth, height.toFloat(), gridPaint)
+            canvas.drawLine(i * cellWidth, 0F, i * cellWidth, height.toFloat(), gridPaint)
         }
 
         for (i in 0..gSize) {
-            canvas.drawLine(0f, i * cellHeight, width.toFloat(), i * cellHeight, gridPaint)
+            canvas.drawLine(0F, i * cellHeight, width.toFloat(), i * cellHeight, gridPaint)
         }
     }
 
     fun addShip(i: Int, j: Int, orientation: Orientation, rank: Int) {
-        val left = (i + 0.25f) * cellWidth
-        val top = (j + 0.25f) * cellHeight
+        val left = (i + 0.25F) * cellWidth
+        val top = (j + 0.25F) * cellHeight
         val right: Float
         val bottom: Float
 
         when (orientation) {
             Orientation.HORIZONTAL -> {
-                right = (i + rank - 1 + 0.75f) * cellWidth
-                bottom = (j + 0.75f) * cellHeight
+                right = (i + rank - 1 + 0.75F) * cellWidth
+                bottom = (j + 0.75F) * cellHeight
             }
             else -> {
-                right = (i + 0.75f) * cellWidth
-                bottom = (j + rank - 1 + 0.75f) * cellHeight
+                right = (i + 0.75F) * cellWidth
+                bottom = (j + rank - 1 + 0.75F) * cellHeight
             }
         }
         shipRects.add(RectF(left, top, right, bottom))
@@ -117,6 +108,7 @@ class BattleField: View {
                     CellState.HIT -> {
                         drawHit(canvas, i, j)
                     }
+                    else -> {}
                 }
             }
         }
@@ -126,22 +118,27 @@ class BattleField: View {
         cellWidth = width.toFloat() / gSize
         cellHeight = height.toFloat() / gSize
 
-        canvas.drawCircle((i + 0.5f) * cellWidth, (j + 0.5f) * cellHeight, 0.3f * cellWidth, hitPaint)
+        canvas.drawCircle((i + 0.5F) * cellWidth, (j + 0.5F) * cellHeight, 0.3F * cellWidth, hitPaint)
     }
 
     private fun drawHit(canvas: Canvas, i: Int, j: Int) {
         cellWidth = width.toFloat() / gSize
         cellHeight = height.toFloat() / gSize
 
-        canvas.drawLine((i + 0.2f) * cellWidth, (j + 0.2f) * cellHeight,
-            (i + 0.8f) * cellWidth, (j + 0.8f) * cellHeight, missPaint)
+        canvas.drawLine((i + 0.2F) * cellWidth, (j + 0.2F) * cellHeight,
+            (i + 0.8F) * cellWidth, (j + 0.8F) * cellHeight, missPaint)
 
-        canvas.drawLine((i + 0.8f) * cellWidth, (j + 0.2f) * cellHeight,
-            (i + 0.2f) * cellWidth, (j + 0.8f) * cellHeight, missPaint)
+        canvas.drawLine((i + 0.8F) * cellWidth, (j + 0.2F) * cellHeight,
+            (i + 0.2F) * cellWidth, (j + 0.8F) * cellHeight, missPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        performClick()
         return true
+    }
+
+    override fun performClick(): Boolean {
+        return super.performClick()
     }
 
     fun refreshCanvas() = invalidate()

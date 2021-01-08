@@ -11,13 +11,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.firebase.database.*
-import com.example.battleshipgame.service.BattleField
+import com.example.battleshipgame.service.BattleView
 
 import com.example.battleshipgame.R
 import com.example.battleshipgame.service.Orientation
@@ -30,7 +27,7 @@ class AllocateFragment : Fragment() {
     private val viewModel: ViewModel by activityViewModels()
 
     private var orientation: Orientation = Orientation.HORIZONTAL
-    private lateinit var allocField: BattleField
+    private lateinit var allocField: BattleView
     private lateinit var toggle: Button
     private lateinit var shipRankText: TextView
     private lateinit var startPlay: Button
