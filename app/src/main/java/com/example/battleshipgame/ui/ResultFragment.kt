@@ -27,11 +27,7 @@ class ResultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_result, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val view = inflater.inflate(R.layout.fragment_result, container, false)
 
         backToMenu = view.findViewById(R.id.btn_back_menu)
         resText = view.findViewById(R.id.tv_result)
@@ -48,5 +44,7 @@ class ResultFragment : Fragment() {
         backToMenu.setOnClickListener {
             findNavController().navigate(R.id.action_resultFragment_to_menuFragment)
         }
+
+        return view
     }
 }

@@ -42,67 +42,62 @@ class AllocateFragment : Fragment() {
     var shipRank = 4
     var shipAmount = 4 - shipRank + 1
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_allocate, container, false)
+
         db = FirebaseDatabase.getInstance()
         gameRef = db.getReference("games/${viewModel.gameId}")
         infoRef = db.getReference("cells/${viewModel.gameId}")
 
-        return inflater.inflate(R.layout.fragment_allocate, container, false)
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         allocField = view.findViewById(R.id.alloc_field)
         toggle = view.findViewById(R.id.orientation_toggle)
         shipRankText = view.findViewById(R.id.tv_ship_size)
         startPlay = view.findViewById(R.id.btn_start_play)
 
         allocField.setOnTouchListener { v, event ->
-            if (event?.action == MotionEvent.ACTION_UP) {
-                if (shipAmount != 0 || shipRank != 1) {
-                    val xTouch = event.x
-                    val yTouch = event.y
-                    val i = (xTouch / allocField.cellWidth).toInt()
-                    val j = (yTouch / allocField.cellHeight).toInt()
+            if (event?.action == MotionEvent.ACTION_UP && (shipAmount != 0 || shipRank != 1)) {
+                val xTouch = event.x
+                val yTouch = event.y
+                val i = (xTouch / allocField.cellWidth).toInt()
+                val j = (yTouch / allocField.cellHeight).toInt()
 
-                    if (checkShipLocation(i, j, orientation, shipRank)) {
-                        allocField.addShip(i, j, orientation, shipRank)
-                        shipAmount -= 1
-                        when {
-                            shipAmount == 0 && shipRank == 1 -> {
-                                val myFieldPath = when (viewModel.playerNum) {
-                                    1 -> "p1"
-                                    else -> "p2"
-                                }
+                if (checkShipLocation(i, j, orientation, shipRank)) {
+                    allocField.addShip(i, j, orientation, shipRank)
+                    shipAmount -= 1
+                    when {
+                        shipAmount == 0 && shipRank == 1 -> {
+                            val myFieldPath = when (viewModel.playerNum) {
+                                1 -> "p1"
+                                else -> "p2"
+                            }
 
-                                val cellsCoord = mutableListOf<Pair<Int, Int>>()
-                                for (x in 0..9) {
-                                    for (y in 0..9) {
-                                        if(viewModel.myCells[x][y].isShip) {
-                                            cellsCoord.add(Pair(x, y))
-                                        }
+                            val cellsCoord = mutableListOf<Pair<Int, Int>>()
+                            for (x in 0..9) {
+                                for (y in 0..9) {
+                                    if(viewModel.myCells[x][y].isShip) {
+                                        cellsCoord.add(Pair(x, y))
                                     }
                                 }
-                                infoRef.child(myFieldPath).setValue(cellsCoord)
+                            }
+                            infoRef.child(myFieldPath).setValue(cellsCoord)
 
-                                shipRankText.text = getString(R.string.ships_are_set)
-                                startPlay.visibility = VISIBLE
-                                viewModel.shipRects = allocField.shipRects
-                                val path = when (viewModel.playerNum) {
-                                    1 -> "p1Ready"
-                                    else -> "p2Ready"
-                                }
-                                gameRef.child(path).setValue(true)
+                            shipRankText.text = getString(R.string.ships_are_set)
+                            startPlay.visibility = VISIBLE
+                            viewModel.shipRects = allocField.shipRects
+                            val path = when (viewModel.playerNum) {
+                                1 -> "p1Ready"
+                                else -> "p2Ready"
                             }
-                            shipAmount == 0 -> {
-                                shipRank -= 1
-                                shipAmount  = 4 - shipRank + 1
-                                shipRankText.text = "Place $shipAmount ships of rank $shipRank"
-                            }
+                            gameRef.child(path).setValue(true)
+                        }
+                        shipAmount == 0 -> {
+                            shipRank -= 1
+                            shipAmount  = 4 - shipRank + 1
+                            shipRankText.text = "Place $shipAmount ships of rank $shipRank"
                         }
                     }
                 }
@@ -128,140 +123,144 @@ class AllocateFragment : Fragment() {
         }
 
         subscribeForReadyUser()
+
+        return view
     }
 
     private fun checkShipLocation(i: Int, j: Int, orientation: Orientation, rank: Int): Boolean {
 
         if(shipAmount == 5) {
-            Toast.makeText(activity, "No more ships", Toast.LENGTH_SHORT).show()
             return false
         }
 
-        if(orientation == Orientation.HORIZONTAL) {
+        when (orientation) {
+            Orientation.HORIZONTAL -> {
 
-            if (i + rank - 1 > 9) {
-                return false
-            }
-
-            for (x in i until i + rank) {
-                if(viewModel.myCells[x][j].isShip) {
+                if (i + rank - 1 > 9) {
                     return false
                 }
-                if (j - 1 >= 0) {
-                    if(viewModel.myCells[x][j - 1].isShip) {
-                        return false
-                    }
-                }
-                if(j + 1 < 10) {
-                    if(viewModel.myCells[x][j + 1].isShip) {
-                        return false
-                    }
-                }
-            }
-            if (i - 1 >= 0) {
-                if(viewModel.myCells[i - 1][j].isShip) {
-                    return false
-                }
-                if(j - 1 >= 0) {
-                    if(viewModel.myCells[i - 1][j - 1].isShip) {
-                        return false
-                    }
-                }
-                if(j + 1 < 10) {
-                    if(viewModel.myCells[i - 1][j + 1].isShip) {
-                        return false
-                    }
-                }
-            }
-            if (i + rank < 10) {
-                if(viewModel.myCells[i + rank][j].isShip) {
-                    return false
-                }
-                if(j - 1 >= 0) {
-                    if(viewModel.myCells[i + rank][j - 1].isShip) {
-                        return false
-                    }
-                }
-                if(j + 1 < 10) {
-                    if(viewModel.myCells[i + rank][j + 1].isShip) {
-                        return false
-                    }
-                }
-            }
 
-            val newShip = Ship()
-            newShip.rank = shipRank
-            newShip.orientation = orientation
-            for (x in i until i + rank) {
-                viewModel.myCells[x][j].isShip = true
-                viewModel.myCells[x][j].x = x
-                viewModel.myCells[x][j].y = j
-                newShip.cells.add(viewModel.myCells[x][j])
-            }
-            viewModel.myShips.add(newShip)
-        } else {
-            if (j + rank - 1 > 9) {
-                return false
-            }
-
-            for (y in j until j + rank) {
-                if(viewModel.myCells[i][y].isShip) {
-                    return false
+                for (x in i until i + rank) {
+                    if(viewModel.myCells[x][j].isShip) {
+                        return false
+                    }
+                    if (j - 1 >= 0) {
+                        if(viewModel.myCells[x][j - 1].isShip) {
+                            return false
+                        }
+                    }
+                    if(j + 1 < 10) {
+                        if(viewModel.myCells[x][j + 1].isShip) {
+                            return false
+                        }
+                    }
                 }
                 if (i - 1 >= 0) {
-                    if(viewModel.myCells[i - 1][y].isShip) {
+                    if(viewModel.myCells[i - 1][j].isShip) {
                         return false
                     }
-                }
-                if(i + 1 < 10) {
-                    if(viewModel.myCells[i + 1][y].isShip) {
-                        return false
+                    if(j - 1 >= 0) {
+                        if(viewModel.myCells[i - 1][j - 1].isShip) {
+                            return false
+                        }
+                    }
+                    if(j + 1 < 10) {
+                        if(viewModel.myCells[i - 1][j + 1].isShip) {
+                            return false
+                        }
                     }
                 }
-            }
+                if (i + rank < 10) {
+                    if(viewModel.myCells[i + rank][j].isShip) {
+                        return false
+                    }
+                    if(j - 1 >= 0) {
+                        if(viewModel.myCells[i + rank][j - 1].isShip) {
+                            return false
+                        }
+                    }
+                    if(j + 1 < 10) {
+                        if(viewModel.myCells[i + rank][j + 1].isShip) {
+                            return false
+                        }
+                    }
+                }
 
-            if (j - 1 >= 0) {
-                if(viewModel.myCells[i][j - 1].isShip) {
+                val newShip = Ship()
+                newShip.rank = shipRank
+                newShip.orientation = orientation
+                for (x in i until i + rank) {
+                    viewModel.myCells[x][j].isShip = true
+                    viewModel.myCells[x][j].x = x
+                    viewModel.myCells[x][j].y = j
+                    newShip.cells.add(viewModel.myCells[x][j])
+                }
+                viewModel.myShips.add(newShip)
+            }
+            else -> {
+                if (j + rank - 1 > 9) {
                     return false
                 }
-                if(i - 1 >= 0) {
-                    if(viewModel.myCells[i - 1][j - 1].isShip) {
-                        return false
-                    }
-                }
-                if(i + 1 < 10) {
-                    if(viewModel.myCells[i + 1][j - 1].isShip) {
-                        return false
-                    }
-                }
-            }
 
-            if (j + rank < 10) {
-                if(viewModel.myCells[i][j + rank].isShip) {
-                    return false
-                }
-                if(i - 1 >= 0) {
-                    if(viewModel.myCells[i - 1][j + rank].isShip) {
+                for (y in j until j + rank) {
+                    if(viewModel.myCells[i][y].isShip) {
                         return false
                     }
-                }
-                if(i + 1 < 9) {
-                    if(viewModel.myCells[i + 1][j + rank].isShip) {
-                        return false
+                    if (i - 1 >= 0) {
+                        if(viewModel.myCells[i - 1][y].isShip) {
+                            return false
+                        }
+                    }
+                    if(i + 1 < 10) {
+                        if(viewModel.myCells[i + 1][y].isShip) {
+                            return false
+                        }
                     }
                 }
-            }
 
-            val newShip = Ship()
-            newShip.rank = shipRank
-            newShip.orientation = orientation
-            for (y in j until j + rank) {
-                viewModel.myCells[i][y].isShip = true
-                viewModel.myCells[i][y].x = i
-                viewModel.myCells[i][y].y = y
-                newShip.cells.add(viewModel.myCells[i][y])
+                if (j - 1 >= 0) {
+                    if(viewModel.myCells[i][j - 1].isShip) {
+                        return false
+                    }
+                    if(i - 1 >= 0) {
+                        if(viewModel.myCells[i - 1][j - 1].isShip) {
+                            return false
+                        }
+                    }
+                    if(i + 1 < 10) {
+                        if(viewModel.myCells[i + 1][j - 1].isShip) {
+                            return false
+                        }
+                    }
+                }
+
+                if (j + rank < 10) {
+                    if(viewModel.myCells[i][j + rank].isShip) {
+                        return false
+                    }
+                    if(i - 1 >= 0) {
+                        if(viewModel.myCells[i - 1][j + rank].isShip) {
+                            return false
+                        }
+                    }
+                    if(i + 1 < 9) {
+                        if(viewModel.myCells[i + 1][j + rank].isShip) {
+                            return false
+                        }
+                    }
+                }
+
+                val newShip = Ship()
+                newShip.rank = shipRank
+                newShip.orientation = orientation
+                for (y in j until j + rank) {
+                    viewModel.myCells[i][y].isShip = true
+                    viewModel.myCells[i][y].x = i
+                    viewModel.myCells[i][y].y = y
+                    newShip.cells.add(viewModel.myCells[i][y])
+                }
+                viewModel.myShips.add(newShip)
             }
-            viewModel.myShips.add(newShip)
         }
         return true
     }

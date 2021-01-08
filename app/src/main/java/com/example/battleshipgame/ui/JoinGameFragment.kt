@@ -33,13 +33,10 @@ class JoinGameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_join_game, container, false)
+
         db = FirebaseDatabase.getInstance()
 
-        return inflater.inflate(R.layout.fragment_join_game, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         joinGame = view.findViewById(R.id.btn_join_start)
         gameIdInput = view.findViewById(R.id.game_id_input)
         joinGame.setOnClickListener {
@@ -70,5 +67,7 @@ class JoinGameFragment : Fragment() {
                 override fun onCancelled(p0: DatabaseError) {}
             })
         }
+
+        return view
     }
 }

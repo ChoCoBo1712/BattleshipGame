@@ -31,28 +31,22 @@ class GameFragment : Fragment() {
     private lateinit var db: FirebaseDatabase
     private lateinit var gameRef: DatabaseReference
     private lateinit var infoRef: DatabaseReference
-
     private lateinit var moveNumText: TextView
     private lateinit var myField: BattleField
     private lateinit var userField: BattleField
-
     private var isInit: Boolean = true
 
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_game, container, false)
+
         db = FirebaseDatabase.getInstance()
         gameRef = db.getReference("games/${viewModel.gameId}")
         infoRef = db.getReference("cells/${viewModel.gameId}")
-
-        return inflater.inflate(R.layout.fragment_game, container, false)
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         moveNumText = view.findViewById(R.id.tv_move_num)
         myField = view.findViewById(R.id.my_field)
@@ -134,7 +128,10 @@ class GameFragment : Fragment() {
             override fun onCancelled(p0: DatabaseError) {}
         })
 
-        val opp = if(viewModel.playerNum == 1) "2" else "1"
+        val opp = when (viewModel.playerNum) {
+            1 -> "2"
+            else -> "1"
+        }
         gameRef.child("oppMove").addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val i = snapshot.child("$opp/first").getValue(Int::class.java) ?: 0
@@ -159,6 +156,8 @@ class GameFragment : Fragment() {
 
             override fun onCancelled(p0: DatabaseError) {}
         })
+
+        return view
     }
 
     private fun makeMove(i: Int, j: Int) {
@@ -166,45 +165,52 @@ class GameFragment : Fragment() {
             return
         }
 
-        val playerNum = if(viewModel.playerNum == 1) "oppMove/1" else "oppMove/2"
+        val playerNum = when (viewModel.playerNum) {
+            1 -> "oppMove/1"
+            else -> "oppMove/2"
+        }
         gameRef.child(playerNum).setValue(Pair(i, j))
 
-        if(viewModel.oppCells[i][j].isShip) {
-            viewModel.oppCells[i][j].state = CellState.HIT
-            userField.cells[i][j].state = CellState.HIT
-            userField.refreshCanvas()
-            if (allCellsDefeated()) {
-                viewModel.winnerNum = viewModel.playerNum
-                gameRef.child("move").setValue(0)
-                var oldAllValue = 0
-                var oldWinsValue = 0
-                val userRef = db.getReference("users/${viewModel.userId}")
-                userRef.child("all").addListenerForSingleValueEvent(object: ValueEventListener{
-                    override fun onCancelled(p0: DatabaseError) {}
+        when {
+            viewModel.oppCells[i][j].isShip -> {
+                viewModel.oppCells[i][j].state = CellState.HIT
+                userField.cells[i][j].state = CellState.HIT
+                userField.refreshCanvas()
+                if (allCellsDefeated()) {
+                    viewModel.winnerNum = viewModel.playerNum
+                    gameRef.child("move").setValue(0)
+                    var oldAllValue = 0
+                    var oldWinsValue = 0
+                    val userRef = db.getReference("users/${viewModel.userId}")
 
-                    override fun onDataChange(p0: DataSnapshot) {
-                        oldAllValue = p0.getValue(Int::class.java) ?: 0
-                    }
+                    userRef.child("all").addListenerForSingleValueEvent(object: ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {}
 
-                })
-                userRef.child("wins").addListenerForSingleValueEvent(object: ValueEventListener{
-                    override fun onCancelled(p0: DatabaseError) {}
+                        override fun onDataChange(p0: DataSnapshot) {
+                            oldAllValue = p0.getValue(Int::class.java) ?: 0
+                        }
+                    })
 
-                    override fun onDataChange(p0: DataSnapshot) {
-                        oldWinsValue = p0.getValue(Int::class.java) ?: 0
-                    }
+                    userRef.child("wins").addListenerForSingleValueEvent(object: ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {}
 
-                })
-                userRef.child("all").setValue(oldAllValue + 1)
-                userRef.child("wins").setValue(oldWinsValue + 1)
-                navigateToRes()
+                        override fun onDataChange(p0: DataSnapshot) {
+                            oldWinsValue = p0.getValue(Int::class.java) ?: 0
+                        }
+                    })
+
+                    userRef.child("all").setValue(oldAllValue + 1)
+                    userRef.child("wins").setValue(oldWinsValue + 1)
+                    navigateToRes()
+                }
             }
-        } else {
-            viewModel.oppCells[i][j].state = CellState.MISS
-            userField.cells[i][j].state = CellState.MISS
-            userField.refreshCanvas()
-            val newMove = if(viewModel.moveNum == 1) 2 else 1
-            gameRef.child("move").setValue(newMove)
+            else -> {
+                viewModel.oppCells[i][j].state = CellState.MISS
+                userField.cells[i][j].state = CellState.MISS
+                userField.refreshCanvas()
+                val newMove = if(viewModel.moveNum == 1) 2 else 1
+                gameRef.child("move").setValue(newMove)
+            }
         }
     }
 
@@ -217,6 +223,7 @@ class GameFragment : Fragment() {
                 }
             }
         }
+
         return true
     }
 

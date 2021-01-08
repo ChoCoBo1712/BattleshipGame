@@ -10,10 +10,11 @@
 
     <TextView
         android:id="@+id/tv_ship_size"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/place_one_5_rank_ship"
+        android:text="@string/place_one_4_rank_ship"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -34,14 +34,10 @@ class CreateGameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_create_game, container, false)
+
         db = FirebaseDatabase.getInstance()
         gamesRef = db.getReference("games")
-
-        return inflater.inflate(R.layout.fragment_create_game, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         startGame = view.findViewById(R.id.btn_start_game)
         gameIdText = view.findViewById(R.id.tv_game_id)
@@ -50,6 +46,8 @@ class CreateGameFragment : Fragment() {
             viewModel.playerNum = 1
             findNavController().navigate(R.id.action_createGameFragment_to_allocateFragment)
         }
+
+        return view
     }
 
     override fun onStart() {
@@ -61,5 +59,4 @@ class CreateGameFragment : Fragment() {
         viewModel.game = game
         gamesRef.child("$gameId").setValue(game)
     }
-
 }

@@ -8,7 +8,7 @@
     <string name="sign_out">Sign out</string>
     <string name="horizontal">Horizontal</string>
     <string name="vertical">Vertical</string>
-    <string name="place_one_5_rank_ship">Place one 5 rank ship</string>
+    <string name="place_one_4_rank_ship">Place one 4 rank ship</string>
     <string name="ships_are_set">All ships are set</string>
     <string name="start">Start</string>
     <string name="players_move">%s player\'s move</string>

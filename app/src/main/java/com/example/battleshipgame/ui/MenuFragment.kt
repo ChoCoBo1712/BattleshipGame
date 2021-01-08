@@ -30,11 +30,7 @@ class MenuFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_menu, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val view = inflater.inflate(R.layout.fragment_menu, container, false)
 
         stats = view.findViewById(R.id.tv_game_stat)
         stats.setOnClickListener {
@@ -50,6 +46,8 @@ class MenuFragment : Fragment() {
         joinGame.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_joinGameFragment)
         }
+
+        return view
     }
 
     override fun onStart() {

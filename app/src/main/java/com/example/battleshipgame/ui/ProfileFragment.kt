@@ -50,22 +50,19 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-
         auth = FirebaseAuth.getInstance()
 
         db = FirebaseDatabase.getInstance()
         userRef = db.getReference("users/${viewModel.userId}")
 
-        return inflater.inflate(R.layout.fragment_profile, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         winsTv = view.findViewById(R.id.tv_wins)
         totalTv = view.findViewById(R.id.tv_all_games)
         image = view.findViewById(R.id.profile_image)
@@ -112,7 +109,6 @@ class ProfileFragment : Fragment() {
             override fun onCancelled(p0: DatabaseError) {}
         })
 
-
         userRef.child("all").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val num = snapshot.getValue(Int::class.java) ?: return
@@ -121,6 +117,8 @@ class ProfileFragment : Fragment() {
 
             override fun onCancelled(p0: DatabaseError) {}
         })
+
+        return view
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -142,13 +140,11 @@ class ProfileFragment : Fragment() {
                             .child("profileImages")
                             .child("${viewModel.userId}.jpeg")
 
-                        ref.putBytes(outputStream.toByteArray())
-                            .addOnSuccessListener {
-                                ref.downloadUrl
-                                    .addOnSuccessListener { uri ->
-                                        userRef.child("image").setValue(uri.toString())
-                                    }
+                        ref.putBytes(outputStream.toByteArray()).addOnSuccessListener {
+                            ref.downloadUrl.addOnSuccessListener { uri ->
+                                userRef.child("image").setValue(uri.toString())
                             }
+                        }
                     }
                 }
             }
