@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 import com.example.battleshipgame.R
+import com.example.battleshipgame.service.Constants.GAMES
 import com.example.battleshipgame.viewmodels.Game
 import com.example.battleshipgame.viewmodels.ViewModel
 import kotlin.random.Random
@@ -37,7 +38,7 @@ class CreateGameFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_create_game, container, false)
 
         db = FirebaseDatabase.getInstance()
-        gamesRef = db.getReference("games")
+        gamesRef = db.getReference(GAMES)
 
         startGame = view.findViewById(R.id.btn_start_game)
         gameIdText = view.findViewById(R.id.tv_game_id)

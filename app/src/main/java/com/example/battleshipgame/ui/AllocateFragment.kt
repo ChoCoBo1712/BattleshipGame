@@ -11,12 +11,21 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.firebase.database.*
 import com.example.battleshipgame.service.BattleView
 
 import com.example.battleshipgame.R
+import com.example.battleshipgame.service.Constants.CELLS
+import com.example.battleshipgame.service.Constants.GAMES
+import com.example.battleshipgame.service.Constants.P1
+import com.example.battleshipgame.service.Constants.P1READY
+import com.example.battleshipgame.service.Constants.P2
+import com.example.battleshipgame.service.Constants.P2READY
 import com.example.battleshipgame.service.Orientation
 import com.example.battleshipgame.service.Ship
 import com.example.battleshipgame.viewmodels.ViewModel
@@ -47,8 +56,8 @@ class AllocateFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_allocate, container, false)
 
         db = FirebaseDatabase.getInstance()
-        gameRef = db.getReference("games/${viewModel.gameId}")
-        infoRef = db.getReference("cells/${viewModel.gameId}")
+        gameRef = db.getReference(GAMES + "/${viewModel.gameId}")
+        infoRef = db.getReference(CELLS + "/${viewModel.gameId}")
 
         allocField = view.findViewById(R.id.alloc_field)
         toggle = view.findViewById(R.id.orientation_toggle)
@@ -68,8 +77,8 @@ class AllocateFragment : Fragment() {
                     when {
                         shipAmount == 0 && shipRank == 1 -> {
                             val myFieldPath = when (viewModel.playerNum) {
-                                1 -> "p1"
-                                else -> "p2"
+                                1 -> P1
+                                else -> P2
                             }
 
                             val cellsCoord = mutableListOf<Pair<Int, Int>>()
@@ -86,15 +95,19 @@ class AllocateFragment : Fragment() {
                             startPlay.visibility = VISIBLE
                             viewModel.shipRects = allocField.shipRects
                             val path = when (viewModel.playerNum) {
-                                1 -> "p1Ready"
-                                else -> "p2Ready"
+                                1 -> P1READY
+                                else -> P2READY
                             }
                             gameRef.child(path).setValue(true)
                         }
                         shipAmount == 0 -> {
                             shipRank -= 1
                             shipAmount  = 4 - shipRank + 1
-                            shipRankText.text = "Place $shipAmount ships of rank $shipRank"
+                            shipRankText.text = resources.getString(
+                                R.string.place_ships,
+                                shipAmount,
+                                shipRank
+                            )
                         }
                     }
                 }
@@ -138,49 +151,21 @@ class AllocateFragment : Fragment() {
                 }
 
                 for (x in i until i + rank) {
-                    if(viewModel.myCells[x][j].isShip) {
+                    if((viewModel.myCells[x][j].isShip) ||
+                        ((j - 1 >= 0) && (viewModel.myCells[x][j - 1].isShip)) ||
+                        ((j + 1 < 10) && (viewModel.myCells[x][j + 1].isShip))) {
                         return false
-                    }
-                    if (j - 1 >= 0) {
-                        if(viewModel.myCells[x][j - 1].isShip) {
-                            return false
-                        }
-                    }
-                    if(j + 1 < 10) {
-                        if(viewModel.myCells[x][j + 1].isShip) {
-                            return false
-                        }
                     }
                 }
-                if (i - 1 >= 0) {
-                    if(viewModel.myCells[i - 1][j].isShip) {
-                        return false
-                    }
-                    if(j - 1 >= 0) {
-                        if(viewModel.myCells[i - 1][j - 1].isShip) {
-                            return false
-                        }
-                    }
-                    if(j + 1 < 10) {
-                        if(viewModel.myCells[i - 1][j + 1].isShip) {
-                            return false
-                        }
-                    }
-                }
-                if (i + rank < 10) {
-                    if(viewModel.myCells[i + rank][j].isShip) {
-                        return false
-                    }
-                    if(j - 1 >= 0) {
-                        if(viewModel.myCells[i + rank][j - 1].isShip) {
-                            return false
-                        }
-                    }
-                    if(j + 1 < 10) {
-                        if(viewModel.myCells[i + rank][j + 1].isShip) {
-                            return false
-                        }
-                    }
+                if (((i - 1 >= 0) &&
+                    ((viewModel.myCells[i - 1][j].isShip) ||
+                    ((j - 1 >= 0) && (viewModel.myCells[i - 1][j - 1].isShip)) ||
+                    ((j + 1 < 10) && (viewModel.myCells[i - 1][j + 1].isShip)))) ||
+                    ((i + rank < 10) &&
+                    ((viewModel.myCells[i + rank][j].isShip) ||
+                    ((j - 1 >= 0) && (viewModel.myCells[i + rank][j - 1].isShip)) ||
+                    ((j + 1 < 10) && (viewModel.myCells[i + rank][j + 1].isShip))))) {
+                    return false
                 }
 
                 val newShip = Ship()
@@ -200,51 +185,21 @@ class AllocateFragment : Fragment() {
                 }
 
                 for (y in j until j + rank) {
-                    if(viewModel.myCells[i][y].isShip) {
+                    if((viewModel.myCells[i][y].isShip) ||
+                        ((i - 1 >= 0) && (viewModel.myCells[i - 1][y].isShip)) ||
+                        ((i + 1 < 10) && (viewModel.myCells[i + 1][y].isShip))) {
                         return false
-                    }
-                    if (i - 1 >= 0) {
-                        if(viewModel.myCells[i - 1][y].isShip) {
-                            return false
-                        }
-                    }
-                    if(i + 1 < 10) {
-                        if(viewModel.myCells[i + 1][y].isShip) {
-                            return false
-                        }
                     }
                 }
-
-                if (j - 1 >= 0) {
-                    if(viewModel.myCells[i][j - 1].isShip) {
-                        return false
-                    }
-                    if(i - 1 >= 0) {
-                        if(viewModel.myCells[i - 1][j - 1].isShip) {
-                            return false
-                        }
-                    }
-                    if(i + 1 < 10) {
-                        if(viewModel.myCells[i + 1][j - 1].isShip) {
-                            return false
-                        }
-                    }
-                }
-
-                if (j + rank < 10) {
-                    if(viewModel.myCells[i][j + rank].isShip) {
-                        return false
-                    }
-                    if(i - 1 >= 0) {
-                        if(viewModel.myCells[i - 1][j + rank].isShip) {
-                            return false
-                        }
-                    }
-                    if(i + 1 < 9) {
-                        if(viewModel.myCells[i + 1][j + rank].isShip) {
-                            return false
-                        }
-                    }
+                if (((j - 1 >= 0) &&
+                    ((viewModel.myCells[i][j - 1].isShip) ||
+                    ((i - 1 >= 0) && (viewModel.myCells[i - 1][j - 1].isShip)) ||
+                    ((i + 1 < 10) && (viewModel.myCells[i + 1][j - 1].isShip)))) ||
+                    ((j + rank < 10) &&
+                    ((viewModel.myCells[i][j + rank].isShip) ||
+                    ((i - 1 >= 0) && (viewModel.myCells[i - 1][j + rank].isShip)) ||
+                    ((i + 1 < 9) && (viewModel.myCells[i + 1][j + rank].isShip))))) {
+                    return false
                 }
 
                 val newShip = Ship()
@@ -263,7 +218,10 @@ class AllocateFragment : Fragment() {
     }
 
     private fun subscribeForReadyUser() {
-        val path = if (viewModel.playerNum == 1) "p2Ready" else "p1Ready"
+        val path = when (viewModel.playerNum) {
+            1 -> P2READY
+            else -> P1READY
+        }
         gameRef.child(path).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.value == true) {

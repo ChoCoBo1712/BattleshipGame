@@ -15,9 +15,15 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.battleshipgame.service.Constants.Companion.PICK_IMAGE_CODE
 import com.example.battleshipgame.R
 import com.example.battleshipgame.service.CircleTransform
+import com.example.battleshipgame.service.Constants.GAMES
+import com.example.battleshipgame.service.Constants.GRAVATAR_LEFT
+import com.example.battleshipgame.service.Constants.GRAVATAR_RIGHT
+import com.example.battleshipgame.service.Constants.IMAGE
+import com.example.battleshipgame.service.Constants.PICK_IMAGE_CODE
+import com.example.battleshipgame.service.Constants.PROFILE_IMAGES
+import com.example.battleshipgame.service.Constants.WINS
 import com.example.battleshipgame.service.Gravatar
 import com.example.battleshipgame.viewmodels.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -79,19 +85,19 @@ class ProfileFragment : Fragment() {
 
         gravatar.setOnClickListener {
             val hash: String = Gravatar.md5Hex(viewModel.userEmail)!!
-            val uri = "https://www.gravatar.com/avatar/$hash?s=204&d=404"
-            userRef.child("image").setValue(uri)
+            val uri = GRAVATAR_LEFT + hash + GRAVATAR_RIGHT
+            userRef.child(IMAGE).setValue(uri)
         }
 
         upload.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = "image/*"
+            intent.type = "$IMAGE/*"
             if (intent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivityForResult(intent, PICK_IMAGE_CODE)
             }
         }
 
-        userRef.child("image").addValueEventListener(object : ValueEventListener {
+        userRef.child(IMAGE).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val path = snapshot.getValue(String::class.java) ?: return
                 Picasso.get().load(path).resize(400, 400).transform(CircleTransform()).into(image)
@@ -100,7 +106,7 @@ class ProfileFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {}
         })
 
-        userRef.child("wins").addListenerForSingleValueEvent(object : ValueEventListener {
+        userRef.child(WINS).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val num = snapshot.getValue(Int::class.java) ?: return
                 winsTv.text = getString(R.string.stats_wins, num.toString())
@@ -109,7 +115,7 @@ class ProfileFragment : Fragment() {
             override fun onCancelled(p0: DatabaseError) {}
         })
 
-        userRef.child("all").addListenerForSingleValueEvent(object : ValueEventListener {
+        userRef.child(GAMES).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val num = snapshot.getValue(Int::class.java) ?: return
                 totalTv.text = getString(R.string.stats_total, num.toString())
@@ -137,12 +143,12 @@ class ProfileFragment : Fragment() {
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
 
                         val ref = storage.reference
-                            .child("profileImages")
+                            .child(PROFILE_IMAGES)
                             .child("${viewModel.userId}.jpeg")
 
                         ref.putBytes(outputStream.toByteArray()).addOnSuccessListener {
                             ref.downloadUrl.addOnSuccessListener { uri ->
-                                userRef.child("image").setValue(uri.toString())
+                                userRef.child(IMAGE).setValue(uri.toString())
                             }
                         }
                     }

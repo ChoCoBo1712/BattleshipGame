@@ -22,4 +22,8 @@
     <string name="upload_image">Upload image</string>
     <string name="defeat">Defeat</string>
     <string name="gravatar_image">Gravatar image</string>
+    <string name="place_ships">Place %d ships of rank %d</string>
+    <string name="sign_in_failed">Sign in failed</string>
+    <string name="wrong_id_type">Wrong id type</string>
+    <string name="no_such_game">No such game</string>
 </resources>

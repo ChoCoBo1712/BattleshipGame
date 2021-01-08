@@ -118,7 +118,7 @@ class BattleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         cellWidth = width.toFloat() / gSize
         cellHeight = height.toFloat() / gSize
 
-        canvas.drawCircle((i + 0.5F) * cellWidth, (j + 0.5F) * cellHeight, 0.3F * cellWidth, hitPaint)
+        canvas.drawCircle((i + 0.5F) * cellWidth, (j + 0.5F) * cellHeight, 0.3F * cellWidth, missPaint)
     }
 
     private fun drawHit(canvas: Canvas, i: Int, j: Int) {
@@ -126,10 +126,10 @@ class BattleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         cellHeight = height.toFloat() / gSize
 
         canvas.drawLine((i + 0.2F) * cellWidth, (j + 0.2F) * cellHeight,
-            (i + 0.8F) * cellWidth, (j + 0.8F) * cellHeight, missPaint)
+            (i + 0.8F) * cellWidth, (j + 0.8F) * cellHeight, hitPaint)
 
         canvas.drawLine((i + 0.8F) * cellWidth, (j + 0.2F) * cellHeight,
-            (i + 0.2F) * cellWidth, (j + 0.8F) * cellHeight, missPaint)
+            (i + 0.2F) * cellWidth, (j + 0.8F) * cellHeight, hitPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

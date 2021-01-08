@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.example.battleshipgame.R
+import com.example.battleshipgame.service.Constants.GAMES
+import com.example.battleshipgame.service.Constants.PLAYER2
 import com.example.battleshipgame.viewmodels.ViewModel
 
 
@@ -44,22 +46,22 @@ class JoinGameFragment : Fragment() {
             try {
                 gameId = gameIdInput.text.toString().toInt()
             } catch (e: TypeCastException) {
-                Toast.makeText(activity, "Wrong id type", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, resources.getString(R.string.wrong_id_type), Toast.LENGTH_SHORT).show()
             }
 
-            val gameRef = db.getReference("games/${gameId}")
+            val gameRef = db.getReference(GAMES + "/${gameId}")
             gameRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     when {
                         snapshot.exists() -> {
-                            gameRef.child("player2").setValue(viewModel.userId)
+                            gameRef.child(PLAYER2).setValue(viewModel.userId)
                             viewModel.playerNum = 2
                             viewModel.gameId = gameId
                             findNavController().navigate(R.id.action_joinGameFragment_to_allocateFragment)
 
                         }
                         else -> {
-                            Toast.makeText(activity, "No such game", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity,  resources.getString(R.string.no_such_game), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

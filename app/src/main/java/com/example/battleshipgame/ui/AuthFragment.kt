@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.battleshipgame.service.Constants.Companion.DEFAULT_IMAGE
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -24,7 +23,12 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 import com.example.battleshipgame.R
-import com.example.battleshipgame.service.Constants.Companion.GOOGLE_SIGN_IN
+import com.example.battleshipgame.service.Constants.DEFAULT_IMAGE
+import com.example.battleshipgame.service.Constants.EMAIL
+import com.example.battleshipgame.service.Constants.GAMES
+import com.example.battleshipgame.service.Constants.GOOGLE_SIGN_IN
+import com.example.battleshipgame.service.Constants.IMAGE
+import com.example.battleshipgame.service.Constants.WINS
 import com.example.battleshipgame.viewmodels.ViewModel
 
 class AuthFragment : Fragment() {
@@ -80,12 +84,12 @@ class AuthFragment : Fragment() {
                 try {
                     val account = task.getResult(ApiException::class.java)
                     firebaseAuthWithGoogle(account!!)
-                    usersRef.child(viewModel.userId).child("all").setValue(0)
-                    usersRef.child(viewModel.userId).child("wins").setValue(0)
-                    usersRef.child(viewModel.userId).child("image").setValue(DEFAULT_IMAGE)
-                    usersRef.child(viewModel.userId).child("email").setValue(account.email)
+                    usersRef.child(viewModel.userId).child(GAMES).setValue(0)
+                    usersRef.child(viewModel.userId).child(WINS).setValue(0)
+                    usersRef.child(viewModel.userId).child(IMAGE).setValue(DEFAULT_IMAGE)
+                    usersRef.child(viewModel.userId).child(EMAIL).setValue(account.email)
                 } catch (e: ApiException) {
-                    Toast.makeText(requireContext(), "Sign in failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), resources.getString(R.string.sign_in_failed), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -100,7 +104,7 @@ class AuthFragment : Fragment() {
                         goToOptionsFragment()
                     }
                     else -> {
-                        Toast.makeText(requireContext(), "Sign in failed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), resources.getString(R.string.sign_in_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
