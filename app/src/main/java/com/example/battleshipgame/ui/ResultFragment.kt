@@ -32,6 +32,7 @@ class ResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         backToMenu = view.findViewById(R.id.btn_back_menu)
         resText = view.findViewById(R.id.tv_result)
 

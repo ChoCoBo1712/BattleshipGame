@@ -21,30 +21,16 @@
         app:layout_constraintVertical_bias="0.05"
         tools:text="Place one 5 rank ship" />
 
-    <LinearLayout
-        android:id="@+id/orientation_toggle_group"
+    <Button
+        android:id="@+id/orientation_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:text="@string/vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.110000014">
-
-        <Button
-            android:id="@+id/btn_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_arrow_right_24dp" />
-
-        <Button
-            android:id="@+id/btn_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_arrow_down_24dp" />
-
-    </LinearLayout>
+        app:layout_constraintVertical_bias="0.2" />
 
     <com.example.battleshipgame.service.BattleField
         android:id="@+id/alloc_field"
@@ -54,7 +40,7 @@
         app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orientation_toggle_group"
+        app:layout_constraintTop_toBottomOf="@+id/orientation_toggle"
         app:layout_constraintVertical_bias="0.3"
         app:withShips="true" />
 
